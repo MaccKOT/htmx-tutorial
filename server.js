@@ -31,6 +31,24 @@ app.get('/users', async (req, res) =>
   `)
 })
 
+// Handle POST /convert
+app.post('/convert', (req, res) =>
+{
+  setTimeout(() =>
+  {
+    const fahrenheit = parseFloat(req.body.fahrenheit);
+    const celsius = (fahrenheit - 32) * (5 / 9);
+
+    res.send(`
+      <p>
+        ${fahrenheit} degrees Farenheit is equal to ${celsius.toFixed(2)} degrees Celsius.
+      </p>
+    `)
+   }, 1000);
+})
+
+
+
 app.listen(3000, () =>
 {
   console.log('Server started on port 3000');
