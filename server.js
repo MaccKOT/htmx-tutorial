@@ -47,6 +47,15 @@ app.post('/convert', (req, res) =>
    }, 1000);
 })
 
+// Handle polling GET request /poll
+let counter = 0;
+app.get('/poll', (req, res) =>
+{
+  counter++;
+  const data = { value: counter }; 
+  res.json(data);
+})
+
 
 
 app.listen(3000, () =>
