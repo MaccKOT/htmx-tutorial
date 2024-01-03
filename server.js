@@ -56,6 +56,13 @@ app.get('/poll', (req, res) =>
   res.json(data);
 })
 
+// Handle GET request for weather
+let currentTemperature = 20;
+app.get("/get-temperature", (req, res) =>
+{
+  currentTemperature += Math.random() * 2 - 1;
+  res.send(currentTemperature.toFixed(1) + '°C');
+})
 
 
 app.listen(3000, () =>
