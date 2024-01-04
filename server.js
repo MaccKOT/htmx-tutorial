@@ -44,7 +44,7 @@ app.post('/convert', (req, res) =>
         ${fahrenheit} degrees Farenheit is equal to ${celsius.toFixed(2)} degrees Celsius.
       </p>
     `)
-   }, 1000);
+  }, 1000);
 })
 
 // Handle polling GET request /poll
@@ -52,7 +52,7 @@ let counter = 0;
 app.get('/poll', (req, res) =>
 {
   counter++;
-  const data = { value: counter }; 
+  const data = { value: counter };
   res.json(data);
 })
 
@@ -64,6 +64,87 @@ app.get("/get-temperature", (req, res) =>
   res.send(currentTemperature.toFixed(1) + '°C');
 })
 
+// Handle POST /search/api
+const contacts = [
+  { name: 'John Doe', email: 'john@example.com' },
+  { name: 'Jane Doe', email: 'jane@example.com' },
+  { name: 'Alice Smith', email: 'alice@example.com' },
+  { name: 'Bob Williams', email: 'bob@example.com' },
+  { name: 'Mary Harris', email: 'mary@example.com' },
+  { name: 'David Mitchell', email: 'david@example.com' },
+];
+
+app.post('/search', (req, res) =>
+{
+  const searchTerm = req.body.search.toLowerCase();
+
+  if (!searchTerm)
+  {
+    return res.send('<tr></tr>');
+  }
+
+  const searchResults = contacts.filter((contact) =>
+  {
+    const name = contact.name.toLowerCase();
+    const email = contact.email.toLowerCase();
+
+    return name.includes(searchTerm) || email.includes(searchTerm);
+  });
+
+  setTimeout(() =>
+  {
+    const searchResultHtml = searchResults
+      .map(
+        (contact) => `
+      <tr>
+        <td><div class="my-4 p-2">${contact.name}</div></td>
+        <td><div class="my-4 p-2">${contact.email}</div></td>
+      </tr>
+    `
+      )
+      .join('');
+
+    res.send(searchResultHtml);
+  }, 700);
+})
+
+// Handle POST request for contacts search from jsonplaceholder
+app.post('/search/api', async (req, res) =>
+{
+  const searchTerm = req.body.search.toLowerCase();
+
+  if (!searchTerm)
+  {
+    return res.send('<tr></tr>');
+  }
+
+  const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
+  const contacts = await response.json();
+
+  const searchResults = contacts.filter((contact) =>
+  {
+    const name = contact.name.toLowerCase();
+    const email = contact.email.toLowerCase();
+
+    return name.includes(searchTerm) || email.includes(searchTerm);
+  });
+
+  setTimeout(() =>
+  {
+    const searchResultHtml = searchResults
+      .map(
+        (contact) => `
+      <tr>
+        <td><div class="my-4 p-2">${contact.name}</div></td>
+        <td><div class="my-4 p-2">${contact.email}</div></td>
+      </tr>
+    `
+      )
+      .join('');
+
+    res.send(searchResultHtml);
+  }, 700);
+});
 
 app.listen(3000, () =>
 {
