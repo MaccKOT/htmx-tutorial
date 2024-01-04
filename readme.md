@@ -3,4 +3,3 @@
 TODO:
 
 - implement Koa instead express
-- make index.html with all examples
