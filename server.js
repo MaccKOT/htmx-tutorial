@@ -146,6 +146,48 @@ app.post('/search/api', async (req, res) =>
   }, 700);
 });
 
+// Handle POST request for email validation
+app.post('/contact/email', (req, res) =>
+{
+  const submitedEmail = req.body.email;
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+  const isValid = {
+    message: "Email is valid",
+    class: 'text-green-700'
+  };
+  const isInalid = {
+    message: "Please enter is valid email address",
+    class: 'text-red-500'
+  };
+
+  if (!emailRegex.test(submitedEmail))
+  {
+    return res.send(`
+    <div class="mb-4" hx-target="this" hx-swap="outerHTML">
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email Address</label>
+    <input name="email" hx-post="/contact/email"
+      class="border rounded-lg py-2 px-3 w-full focus:outline-none focus:border-blue-500" type="email" id="email" value="${submitedEmail}"
+      required />
+      <div class="${isInalid.class}">${isInalid.message}</div>
+  </div>
+    `)
+  } else
+  {
+    return res.send(`
+    <div class="mb-4" hx-target="this" hx-swap="outerHTML">
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email Address</label>
+    <input name="email" hx-post="/contact/email"
+      class="border rounded-lg py-2 px-3 w-full focus:outline-none focus:border-blue-500" type="email" id="email" value="${submitedEmail}"
+      required />
+      <div class="${isValid.class}">${isValid.message}</div>
+  </div>
+    `)
+  }
+
+})
+
+
 app.listen(3000, () =>
 {
   console.log('Server started on port 3000');
